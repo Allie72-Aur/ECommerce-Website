@@ -63,3 +63,8 @@ coverage.xml
 
 # Pyre type checker
 .pyre/
+
+# SQLite database
+database.db
+# Ignore the .gitignore file itself to avoid committing changes to it
+.gitignore
