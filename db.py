@@ -12,6 +12,18 @@ def init_db():
             img TEXT
         )
     ''')
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS orders (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            address TEXT NOT NULL,
+            payment_method TEXT NOT NULL,
+            payment_info TEXT,
+            items TEXT NOT NULL,
+            total REAL NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
     # Insert initial data if table is empty
     c.execute('SELECT COUNT(*) FROM products')
     if c.fetchone()[0] == 0:
@@ -45,3 +57,13 @@ def get_product_by_id(pid):
     if row:
         return {'id': row[0], 'name': row[1], 'price': row[2], 'desc': row[3], 'img': row[4]}
     return None
+
+def save_order(name, address, payment_method, payment_info, items, total):
+    conn = sqlite3.connect('products.db')
+    c = conn.cursor()
+    c.execute('''
+        INSERT INTO orders (name, address, payment_method, payment_info, items, total)
+        VALUES (?, ?, ?, ?, ?, ?)
+    ''', (name, address, payment_method, payment_info, items, total))
+    conn.commit()
+    conn.close()
