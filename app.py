@@ -1,5 +1,5 @@
 from db import (
-    init_db, create_user_table, register_user, authenticate_user, get_user_id, get_user_info,
+    init_db, register_user, authenticate_user, get_user_id, get_user_info,
     get_all_products, get_product_by_id, save_order
 )
 import os
@@ -14,9 +14,6 @@ app.secret_key = "replace-with-a-secure-key"
 # Initialize database if not exists
 if not os.path.exists('database.db'):
     init_db()
-
-# Initialize user table
-create_user_table()
 
 
 def get_product(pid):
