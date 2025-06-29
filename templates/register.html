@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cart - ElectroShop</title>
+    <title>Register - ElectroShop</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -29,31 +29,42 @@
       </div>
     </nav>
     <div class="container">
-      <h2>Your Cart</h2>
-      {% if items %}
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Product</th>
-            <th>Qty</th>
-            <th>Subtotal</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for item in items %}
-          <tr>
-            <td>{{ item.product.name }}</td>
-            <td>{{ item.qty }}</td>
-            <td>${{ '%.2f'|format(item.subtotal) }}</td>
-          </tr>
+      <h2>Register</h2>
+      {% if errors %}
+      <div class="alert alert-danger">
+        <ul>
+          {% for error in errors %}
+          <li>{{ error }}</li>
           {% endfor %}
-        </tbody>
-      </table>
-      <h4>Total: ${{ '%.2f'|format(total) }}</h4>
-      <a href="/checkout" class="btn btn-success">Checkout</a>
-      {% else %}
-      <p>Your cart is empty.</p>
+        </ul>
+      </div>
       {% endif %}
+      <form method="post">
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            name="username"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-success">Register</button>
+      </form>
+      <p class="mt-3">
+        Already have an account? <a href="/login">Login here</a>.
+      </p>
     </div>
   </body>
 </html>

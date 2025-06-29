@@ -1,15 +1,22 @@
-from flask import Flask, render_template, redirect, url_for, request, session
-from db import init_db, get_all_products, get_product_by_id, save_order
+from db import (
+    init_db, create_user_table, register_user, authenticate_user, get_user_id, get_user_info,
+    get_all_products, get_product_by_id, save_order
+)
 import os
 import json
 import re
+from flask import Flask, render_template, redirect, url_for, request, session
+from urllib.parse import urlparse, urljoin
 
 app = Flask(__name__)
 app.secret_key = "replace-with-a-secure-key"
 
 # Initialize database if not exists
-if not os.path.exists('products.db'):
+if not os.path.exists('database.db'):
     init_db()
+
+# Initialize user table
+create_user_table()
 
 
 def get_product(pid):
@@ -18,6 +25,12 @@ def get_product(pid):
 
 def sanitize_text(text):
     return re.sub(r'[^\w\s@.-]', '', text.strip())
+
+
+def is_safe_url(target):
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url, target))
+    return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
 
 
 @app.route("/")
@@ -57,9 +70,14 @@ def cart():
 
 @app.route("/checkout", methods=["GET", "POST"])
 def checkout():
+    if 'user' not in session:
+        return redirect(url_for('login', next=request.url))
+    user_info = get_user_info(session['user'])
+    name = user_info['username'] if user_info else ''
+    address = ''
     if request.method == "POST":
-        name = sanitize_text(request.form.get("name", ""))
-        address = sanitize_text(request.form.get("address", ""))
+        name = sanitize_text(request.form.get("name", name))
+        address = sanitize_text(request.form.get("address", address))
         payment_method = sanitize_text(request.form.get("payment_method", ""))
         payment_info = ""
         errors = []
@@ -96,12 +114,52 @@ def checkout():
         if not items:
             errors.append("Cart is empty.")
         if errors:
-            return render_template("checkout.html", success=False, errors=errors)
-        # Save order
-        save_order(name, address, payment_method, payment_info, json.dumps(items), total)
+            return render_template("checkout.html", success=False, errors=errors, name=name, address=address)
+        # Save order with user_id
+        user_id = get_user_id(session['user'])
+        save_order(name, address, payment_method, payment_info, json.dumps(items), total, user_id=user_id)
         session.pop("cart", None)
         return render_template("checkout.html", success=True)
-    return render_template("checkout.html", success=False, errors=None)
+    return render_template("checkout.html", success=False, errors=None, name=name, address=address)
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    errors = []
+    if request.method == 'POST':
+        username = request.form.get('username', '').strip()
+        password = request.form.get('password', '').strip()
+        if not username or not password:
+            errors.append('Username and password are required.')
+        elif register_user(username, password):
+            return redirect(url_for('login'))
+        else:
+            errors.append('Username already exists.')
+    return render_template('register.html', errors=errors)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    errors = []
+    next_url = request.args.get('next')
+    if request.method == 'POST':
+        username = request.form.get('username', '').strip()
+        password = request.form.get('password', '').strip()
+        if authenticate_user(username, password):
+            session['user'] = username
+            next_page = request.form.get('next')
+            if next_page and is_safe_url(next_page):
+                return redirect(next_page)
+            return redirect(url_for('index'))
+        else:
+            errors.append('Invalid username or password.')
+    return render_template('login.html', errors=errors, next=next_url)
+
+
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    return redirect(url_for('index'))
 
 
 if __name__ == "__main__":
