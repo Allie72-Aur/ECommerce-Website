@@ -8,6 +8,8 @@ PRODUCTS_CSV = "products.csv"
 
 
 def init_db():
+    if os.path.exists(DB_FILENAME):
+        os.remove(DB_FILENAME)  # Remove existing database file for fresh start
     conn = sqlite3.connect(DB_FILENAME)
     c = conn.cursor()
     c.execute("""

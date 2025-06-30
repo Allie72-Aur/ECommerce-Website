@@ -17,5 +17,5 @@ id,name,price,desc,img,stock
 16,Smart Home Plug,22.99,WiFi smart home plug,/static/images/wifi-smart-home-plug.jpg,20
 17,Action Camera,129.99,Waterproof action camera 4K,/static/images/waterproof-action-camera-4k.png,5
 18,VR Headset,249.99,Standalone VR headset,/static/images/standalone-vr-headset.jpg,4
-19,Router,69.99,WiFi 6 dual-band router,/static/images/wifi6-dual-band-router.jpg,8
+19,Router,69.99,WiFi 6 dual-band router,/static/images/wifi6-dual-band-router.png,8
 20,Desk Lamp,27.99,LED desk lamp with USB charging,/static/images/led-desk-lamp-usb.jpg,15
