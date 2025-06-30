@@ -1,7 +1,10 @@
 import sqlite3
 import hashlib
+import csv
+import os
 
 DB_FILENAME = "database.db"
+PRODUCTS_CSV = "products.csv"
 
 
 def init_db():
@@ -38,42 +41,22 @@ def init_db():
             FOREIGN KEY(user_id) REFERENCES users(id)
         )
     """)
-    # Insert initial data
-    products = [
-        (
-            1,
-            "Smartphone",
-            299.99,
-            "Latest model smartphone",
-            "/static/images/latest-model-smartphone.webp",
-            10,
-        ),
-        (
-            2,
-            "Laptop",
-            799.99,
-            "Lightweight laptop",
-            "/static/images/lightweight-laptop.jpg",
-            5,
-        ),
-        (
-            3,
-            "Headphones",
-            49.99,
-            "Noise-cancelling headphones",
-            "/static/images/noise-cancelling-headphones.jpg",
-            20,
-        ),
-        (
-            4,
-            "Charger",
-            19.99,
-            "Fast USB charger",
-            "/static/images/fast-usb-charger.png",
-            15,
-        ),
-    ]
-    c.executemany("INSERT INTO Products VALUES (?, ?, ?, ?, ?, ?)", products)
+    # Insert initial data from CSV
+    if os.path.exists(PRODUCTS_CSV):
+        with open(PRODUCTS_CSV, newline="", encoding="utf-8") as csvfile:
+            reader = csv.DictReader(csvfile)
+            products = [
+                (
+                    int(row["id"]),
+                    row["name"],
+                    float(row["price"]),
+                    row["desc"],
+                    row["img"],
+                    int(row["stock"]),
+                )
+                for row in reader
+            ]
+            c.executemany("INSERT INTO Products VALUES (?, ?, ?, ?, ?, ?)", products)
     conn.commit()
     conn.close()
 

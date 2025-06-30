@@ -1,0 +1,21 @@
+id,name,price,desc,img,stock
+1,Smartphone,299.99,Latest model smartphone,/static/images/latest-model-smartphone.webp,10
+2,Laptop,799.99,Lightweight laptop,/static/images/lightweight-laptop.jpg,5
+3,Headphones,49.99,Noise-cancelling headphones,/static/images/noise-cancelling-headphones.jpg,20
+4,Charger,19.99,Fast USB charger,/static/images/fast-usb-charger.png,15
+5,Wireless Mouse,24.99,Ergonomic wireless mouse,/static/images/ergonomic-wireless-mouse.jpg,18
+6,Mechanical Keyboard,89.99,RGB mechanical keyboard,/static/images/rgb-mechanical-keyboard.jpg,12
+7,Smartwatch,149.99,Water-resistant smartwatch,/static/images/water-resistant-smartwatch.png,8
+8,Tablet,399.99,10-inch HD tablet,/static/images/10-inch-hd-tablet.jpg,7
+9,Portable Speaker,59.99,Bluetooth portable speaker,/static/images/bluetooth-portable-speaker.jpg,14
+10,Webcam,39.99,HD USB webcam,/static/images/hd-usb-webcam.jpg,10
+11,Power Bank,29.99,10000mAh power bank,/static/images/10000mah-power-bank.png,20
+12,USB-C Hub,34.99,Multiport USB-C hub,/static/images/multiport-usb-c-hub.jpg,15
+13,Wireless Earbuds,69.99,True wireless earbuds,/static/images/true-wireless-earbuds.jpg,16
+14,Monitor,199.99,24-inch FHD monitor,/static/images/24-inch-fhd-monitor.jpg,6
+15,External SSD,129.99,1TB portable SSD,/static/images/1tb-portable-ssd.jpg,9
+16,Smart Home Plug,22.99,WiFi smart home plug,/static/images/wifi-smart-home-plug.jpg,20
+17,Action Camera,129.99,Waterproof action camera 4K,/static/images/waterproof-action-camera-4k.jpg,5
+18,VR Headset,249.99,Standalone VR headset,/static/images/standalone-vr-headset.jpg,4
+19,Router,69.99,WiFi 6 dual-band router,/static/images/wifi6-dual-band-router.jpg,8
+20,Desk Lamp,27.99,LED desk lamp with USB charging,/static/images/led-desk-lamp-usb.jpg,15
