@@ -37,40 +37,38 @@ def init_db():
             FOREIGN KEY(user_id) REFERENCES users(id)
         )
     """)
-    # Insert initial data if table is empty
-    c.execute("SELECT COUNT(*) FROM products")
-    if c.fetchone()[0] == 0:
-        products = [
-            (
-                1,
-                "Smartphone",
-                299.99,
-                "Latest model smartphone",
-                "https://via.placeholder.com/150",
-            ),
-            (
-                2,
-                "Laptop",
-                799.99,
-                "Lightweight laptop",
-                "https://via.placeholder.com/150",
-            ),
-            (
-                3,
-                "Headphones",
-                49.99,
-                "Noise-cancelling headphones",
-                "https://via.placeholder.com/150",
-            ),
-            (
-                4,
-                "Charger",
-                19.99,
-                "Fast USB charger",
-                "https://via.placeholder.com/150",
-            ),
-        ]
-        c.executemany("INSERT INTO products VALUES (?, ?, ?, ?, ?)", products)
+    # Insert initial data
+    products = [
+        (
+            1,
+            "Smartphone",
+            299.99,
+            "Latest model smartphone",
+            "/static/images/latest-model-smartphone.webp",
+        ),
+        (
+            2,
+            "Laptop",
+            799.99,
+            "Lightweight laptop",
+            "/static/images/lightweight-laptop.jpg",
+        ),
+        (
+            3,
+            "Headphones",
+            49.99,
+            "Noise-cancelling headphones",
+            "/static/images/noise-cancelling-headphones.jpg",
+        ),
+        (
+            4,
+            "Charger",
+            19.99,
+            "Fast USB charger",
+            "/static/images/fast-usb-charger.png",
+        ),
+    ]
+    c.executemany("INSERT INTO products VALUES (?, ?, ?, ?, ?)", products)
     conn.commit()
     conn.close()
 
@@ -129,14 +127,19 @@ def get_user_info(username):
 
 
 def get_all_products():
-    conn = sqlite3.connect(DB_FILENAME)
-    c = conn.cursor()
-    c.execute("SELECT id, name, price, desc, img FROM products")
-    products = [
-        {"id": row[0], "name": row[1], "price": row[2], "desc": row[3], "img": row[4]}
-        for row in c.fetchall()
-    ]
-    conn.close()
+    with sqlite3.connect(DB_FILENAME) as conn:
+        c = conn.cursor()
+        c.execute("SELECT id, name, price, desc, img FROM products")
+        products = [
+            {
+                "id": row[0],
+                "name": row[1],
+                "price": row[2],
+                "desc": row[3],
+                "img": row[4],
+            }
+            for row in c.fetchall()
+        ]
     return products
 
 

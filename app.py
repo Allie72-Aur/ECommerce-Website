@@ -2,7 +2,6 @@ from db import (
     init_db, register_user, authenticate_user, get_user_id, get_user_info,
     get_all_products, get_product_by_id, save_order
 )
-import os
 import json
 import re
 from flask import Flask, render_template, redirect, url_for, request, session
@@ -11,9 +10,8 @@ from urllib.parse import urlparse, urljoin
 app = Flask(__name__)
 app.secret_key = "replace-with-a-secure-key"
 
-# Initialize database if not exists
-if not os.path.exists('database.db'):
-    init_db()
+# Initialize database
+init_db()
 
 
 def get_product(pid):
