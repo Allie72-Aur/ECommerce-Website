@@ -19,3 +19,6 @@ id,name,price,desc,img,stock
 18,VR Headset,249.99,Standalone VR headset,/static/images/standalone-vr-headset.jpg,4
 19,Router,69.99,WiFi 6 dual-band router,/static/images/wifi6-dual-band-router.png,8
 20,Desk Lamp,27.99,LED desk lamp with USB charging,/static/images/led-desk-lamp-usb.jpg,15
+21,Earphone,29.99,High-quality earphones,/static/images/high-quality-earphones.jpg,10
+22,Gaming Keyboard,99.99,Gaming keyboard with RGB lighting,/static/images/gaming-keyboard.jpg,6
+23,Wired Mouse,19.99,Yellow wired mouse,/static/images/yellow-wired-mouse.png,12
