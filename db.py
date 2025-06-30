@@ -8,23 +8,24 @@ def init_db():
     conn = sqlite3.connect(DB_FILENAME)
     c = conn.cursor()
     c.execute("""
-        CREATE TABLE IF NOT EXISTS products (
+        CREATE TABLE Products (
             id INTEGER PRIMARY KEY,
             name TEXT NOT NULL,
             price REAL NOT NULL,
             desc TEXT,
-            img TEXT
+            img TEXT,
+            stock INTEGER NOT NULL DEFAULT 0
         )
     """)
     c.execute("""
-        CREATE TABLE IF NOT EXISTS users (
+        CREATE TABLE Users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE NOT NULL,
             password_hash TEXT NOT NULL
         )
     """)
     c.execute("""
-        CREATE TABLE IF NOT EXISTS orders (
+        CREATE TABLE Orders (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER,
             name TEXT NOT NULL,
@@ -45,6 +46,7 @@ def init_db():
             299.99,
             "Latest model smartphone",
             "/static/images/latest-model-smartphone.webp",
+            10,
         ),
         (
             2,
@@ -52,6 +54,7 @@ def init_db():
             799.99,
             "Lightweight laptop",
             "/static/images/lightweight-laptop.jpg",
+            5,
         ),
         (
             3,
@@ -59,6 +62,7 @@ def init_db():
             49.99,
             "Noise-cancelling headphones",
             "/static/images/noise-cancelling-headphones.jpg",
+            20,
         ),
         (
             4,
@@ -66,9 +70,10 @@ def init_db():
             19.99,
             "Fast USB charger",
             "/static/images/fast-usb-charger.png",
+            15,
         ),
     ]
-    c.executemany("INSERT INTO products VALUES (?, ?, ?, ?, ?)", products)
+    c.executemany("INSERT INTO Products VALUES (?, ?, ?, ?, ?, ?)", products)
     conn.commit()
     conn.close()
 
@@ -82,7 +87,7 @@ def register_user(username, password):
     c = conn.cursor()
     try:
         c.execute(
-            "INSERT INTO users (username, password_hash) VALUES (?, ?)",
+            "INSERT INTO Users (username, password_hash) VALUES (?, ?)",
             (username, hash_password(password)),
         )
         conn.commit()
@@ -96,7 +101,7 @@ def register_user(username, password):
 def authenticate_user(username, password):
     conn = sqlite3.connect(DB_FILENAME)
     c = conn.cursor()
-    c.execute("SELECT password_hash FROM users WHERE username=?", (username,))
+    c.execute("SELECT password_hash FROM Users WHERE username=?", (username,))
     row = c.fetchone()
     conn.close()
     if row and row[0] == hash_password(password):
@@ -107,7 +112,7 @@ def authenticate_user(username, password):
 def get_user_id(username):
     conn = sqlite3.connect(DB_FILENAME)
     c = conn.cursor()
-    c.execute("SELECT id FROM users WHERE username=?", (username,))
+    c.execute("SELECT id FROM Users WHERE username=?", (username,))
     row = c.fetchone()
     conn.close()
     if row:
@@ -118,7 +123,7 @@ def get_user_id(username):
 def get_user_info(username):
     conn = sqlite3.connect(DB_FILENAME)
     c = conn.cursor()
-    c.execute("SELECT id, username FROM users WHERE username=?", (username,))
+    c.execute("SELECT id, username FROM Users WHERE username=?", (username,))
     row = c.fetchone()
     conn.close()
     if row:
@@ -129,7 +134,7 @@ def get_user_info(username):
 def get_all_products():
     with sqlite3.connect(DB_FILENAME) as conn:
         c = conn.cursor()
-        c.execute("SELECT id, name, price, desc, img FROM products")
+        c.execute("SELECT id, name, price, desc, img, stock FROM Products")
         products = [
             {
                 "id": row[0],
@@ -137,6 +142,7 @@ def get_all_products():
                 "price": row[2],
                 "desc": row[3],
                 "img": row[4],
+                "stock": row[5],
             }
             for row in c.fetchall()
         ]
@@ -146,7 +152,9 @@ def get_all_products():
 def get_product_by_id(pid):
     conn = sqlite3.connect(DB_FILENAME)
     c = conn.cursor()
-    c.execute("SELECT id, name, price, desc, img FROM products WHERE id=?", (pid,))
+    c.execute(
+        "SELECT id, name, price, desc, img, stock FROM Products WHERE id=?", (pid,)
+    )
     row = c.fetchone()
     conn.close()
     if row:
@@ -156,6 +164,7 @@ def get_product_by_id(pid):
             "price": row[2],
             "desc": row[3],
             "img": row[4],
+            "stock": row[5],
         }
     return None
 
@@ -165,10 +174,20 @@ def save_order(name, address, payment_method, payment_info, items, total, user_i
     c = conn.cursor()
     c.execute(
         """
-        INSERT INTO orders (user_id, name, address, payment_method, payment_info, items, total)
+        INSERT INTO Orders (user_id, name, address, payment_method, payment_info, items, total)
         VALUES (?, ?, ?, ?, ?, ?, ?)
     """,
         (user_id, name, address, payment_method, payment_info, items, total),
     )
     conn.commit()
     conn.close()
+
+
+def update_stock(pid, qty):
+    with sqlite3.connect(DB_FILENAME) as conn:
+        c = conn.cursor()
+        c.execute(
+            "UPDATE products SET stock = stock - ? WHERE id = ? AND stock >= ?",
+            (qty, pid, qty),
+        )
+        conn.commit()

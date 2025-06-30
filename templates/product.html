@@ -41,6 +41,7 @@
           <h2>{{ product.name }}</h2>
           <p>{{ product.desc }}</p>
           <h4>${{ product.price }}</h4>
+          <p class="text-muted">Stock: {{ product.stock }}</p>
           <a href="/add_to_cart/{{ product.id }}" class="btn btn-success"
             >Add to Cart</a
           >

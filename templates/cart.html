@@ -37,6 +37,7 @@
             <th>Product</th>
             <th>Qty</th>
             <th>Subtotal</th>
+            <th>Stock</th>
           </tr>
         </thead>
         <tbody>
@@ -45,6 +46,7 @@
             <td>{{ item.product.name }}</td>
             <td>{{ item.qty }}</td>
             <td>${{ '%.2f'|format(item.subtotal) }}</td>
+            <td>{{ item.product.stock }}</td>
           </tr>
           {% endfor %}
         </tbody>
