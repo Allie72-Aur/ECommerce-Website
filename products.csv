@@ -9,8 +9,8 @@ id,name,price,desc,img,stock
 8,Tablet,399.99,10-inch HD tablet,/static/images/10-inch-hd-tablet.jpg,7
 9,Portable Speaker,59.99,Bluetooth portable speaker,/static/images/bluetooth-portable-speaker.jpg,14
 10,Webcam,39.99,HD USB webcam,/static/images/hd-usb-webcam.png,10
-11,Power Bank,29.99,10000mAh power bank,/static/images/10000mah-power-bank.jpg,20
-12,USB-C Hub,34.99,Multiport USB-C hub,/static/images/multiport-usb-c-hub.png,15
+11,Power Bank,29.99,10000mAh power bank,/static/images/10000mah-power-bank.png,20
+12,USB-C Hub,34.99,Multiport USB-C hub,/static/images/multiport-usb-c-hub.jpg,15
 13,Wireless Earbuds,69.99,True wireless earbuds,/static/images/true-wireless-earbuds.avif,16
 14,Monitor,199.99,24-inch FHD monitor,/static/images/24-inch-fhd-monitor.avif,6
 15,External SSD,129.99,1TB portable SSD,/static/images/1tb-portable-ssd.png,9

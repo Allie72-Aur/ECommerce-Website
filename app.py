@@ -48,10 +48,21 @@ def product_detail(pid):
     return render_template("product.html", product=product)
 
 
-@app.route("/add_to_cart/<int:pid>")
+@app.route("/add_to_cart/<int:pid>", methods=["GET"])
 def add_to_cart(pid):
     cart = session.get("cart", {})
-    cart[str(pid)] = cart.get(str(pid), 0) + 1
+    product = get_product(pid)
+    if not product or product.get("stock", 0) == 0:
+        return redirect(url_for("cart"))
+    try:
+        qty = int(request.args.get("qty", 1))
+    except (TypeError, ValueError):
+        qty = 1
+    qty = max(1, min(qty, product["stock"]))
+    cart[str(pid)] = cart.get(str(pid), 0) + qty
+    # Ensure cart quantity does not exceed stock
+    if cart[str(pid)] > product["stock"]:
+        cart[str(pid)] = product["stock"]
     session["cart"] = cart
     return redirect(url_for("cart"))
 
