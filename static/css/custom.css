@@ -103,3 +103,30 @@
 .container {
   padding-bottom: 2rem;
 }
+
+/* Modern product grid card styles */
+.product-grid-card {
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #f8fafd 0%, #e0e0e0 100%);
+  box-shadow: 0 2px 16px rgba(180, 200, 220, 0.1);
+  border: none;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.product-grid-card:hover {
+  box-shadow: 0 8px 32px rgba(127, 216, 255, 0.18);
+  transform: translateY(-4px) scale(1.02);
+}
+
+.product-grid-card .card-body {
+  padding: 1.5rem 1rem 1rem 1rem;
+}
+
+.product-grid-card .card-title {
+  font-size: 1.35rem;
+  color: #222;
+}
+
+.product-grid-card .card-text {
+  color: #555;
+}
