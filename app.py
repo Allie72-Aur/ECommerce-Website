@@ -162,16 +162,24 @@ def checkout():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     errors = []
+    next_url = request.args.get("next")
     if request.method == "POST":
         username = request.form.get("username", "").strip()
         password = request.form.get("password", "").strip()
+        form_next = request.form.get("next")
         if not username or not password:
             errors.append("Username and password are required.")
         elif register_user(username, password):
-            return redirect(url_for("login"))
+            session["user"] = username  # Log in the user automatically
+            # Redirect to next_url if safe, else home
+            if form_next and is_safe_url(form_next):
+                return redirect(form_next)
+            elif next_url and is_safe_url(next_url):
+                return redirect(next_url)
+            return redirect(url_for("index"))
         else:
             errors.append("Username already exists.")
-    return render_template("register.html", errors=errors)
+    return render_template("register.html", errors=errors, next=next_url)
 
 
 @app.route("/login", methods=["GET", "POST"])
