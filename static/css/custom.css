@@ -1,15 +1,12 @@
 /* Minimalistic card shadow and hover effect with metallic border */
 .card {
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
-  transition: box-shadow 0.2s, border 0.2s;
-  border-radius: 0.5rem;
-  border: 2px solid #b0b0b0; /* Subtle metallic border */
+  box-shadow: none;
+  border: none; /* Subtle metallic border */
   background: linear-gradient(135deg, #fff 0%, #e0e0e0 100%);
 }
 
 .card:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  border: 2px solid #7fd8ff; /* Cyan-silver metallic on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background: linear-gradient(135deg, #fff 0%, #b0c4ce 100%);
 }
 
@@ -21,11 +18,27 @@
 
 /* Carousel arrow tweaks for subtlety and metallic look */
 .custom-carousel-arrow {
+  left: -60px;
+  right: auto;
+  width: 64px;
+  height: 64px;
+  top: 40%;
+  background: rgba(120, 120, 120, 0.4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
   opacity: 0.8;
   transition: opacity 0.2s, background 0.2s, box-shadow 0.2s, border 0.2s;
   background: linear-gradient(135deg, #b0b0b0 60%, #e0e0e0 100%) !important;
   box-shadow: 0 2px 8px rgba(180, 180, 180, 0.15);
   border: 2px solid #b0b0b0;
+}
+
+.carousel-control-next.custom-carousel-arrow {
+  left: auto;
+  right: -60px;
 }
 
 .custom-carousel-arrow:hover {
@@ -34,12 +47,25 @@
   border: 2px solid #7fd8ff;
 }
 
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(1) grayscale(1);
+  width: 40px;
+  height: 40px;
+}
+
 /* Navbar brand metallic accent */
 .navbar-brand {
-  font-weight: 700;
-  letter-spacing: 1px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  font-size: 2rem;
   color: #b0b0b0 !important;
-  text-shadow: 0 1px 2px #fff, 0 0px 8px #b0b0b0;
+  font-family: "Segoe UI", "Arial", sans-serif;
+  text-shadow: none;
+  background: none;
+  -webkit-background-clip: initial;
+  -webkit-text-fill-color: initial;
+  background-clip: initial;
 }
 
 /* Minimal button rounding and metallic border */
@@ -55,6 +81,22 @@
 .btn:focus {
   border: 2px solid #7fd8ff;
   background: linear-gradient(135deg, #e0f7fa 60%, #b0c4ce 100%);
+  color: #222;
+}
+
+/* Cart button gold on hover */
+.btn[href$="/cart"]:hover,
+.btn[href$="/cart"]:focus {
+  border: 2px solid #ffd700;
+  background: linear-gradient(135deg, #fffbe6 60%, #ffd700 100%);
+  color: #222;
+}
+
+/* Logout button red on hover */
+.btn[href$="/logout"]:hover,
+.btn[href$="/logout"]:focus {
+  border: 2px solid #d32f2f;
+  background: linear-gradient(135deg, #fff0f0 60%, #d32f2f 100%);
   color: #222;
 }
 
