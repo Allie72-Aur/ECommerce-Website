@@ -23,17 +23,16 @@
   width: 64px;
   height: 64px;
   top: 40%;
-  background: rgba(120, 120, 120, 0.4);
+  background: transparent !important;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   position: absolute;
-  opacity: 0.8;
-  transition: opacity 0.2s, background 0.2s, box-shadow 0.2s, border 0.2s;
-  background: linear-gradient(135deg, #b0b0b0 60%, #e0e0e0 100%) !important;
-  box-shadow: 0 2px 8px rgba(180, 180, 180, 0.15);
-  border: 2px solid #b0b0b0;
+  opacity: 0.25;
+  box-shadow: none;
+  border: none;
+  transition: opacity 0.2s, background 0.2s;
 }
 
 .carousel-control-next.custom-carousel-arrow {
@@ -42,14 +41,14 @@
 }
 
 .custom-carousel-arrow:hover {
-  opacity: 1;
-  background: linear-gradient(135deg, #7fd8ff 60%, #e0e0e0 100%) !important;
-  border: 2px solid #7fd8ff;
+  opacity: 0.5;
+  background: transparent !important;
+  border: none;
 }
 
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
-  filter: invert(1) grayscale(1);
+  filter: invert(1) grayscale(1) opacity(0.5);
   width: 40px;
   height: 40px;
 }
