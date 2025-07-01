@@ -1,3 +1,8 @@
+"""
+app.py - Main Flask application for ElectroShop e-commerce site.
+Handles routing, user sessions, cart, checkout, and integrates with db.py.
+"""
+
 from db import (
     init_db,
     register_user,
@@ -17,19 +22,28 @@ from urllib.parse import urlparse, urljoin
 app = Flask(__name__)
 app.secret_key = "ercynpr-jvgu-n-frpher-xrl"
 
-# Initialize database
+# Initialize database on app start (dev only)
 init_db()
 
 
 def get_product(pid):
+    """
+    Helper to fetch a product by its ID.
+    """
     return get_product_by_id(pid)
 
 
 def sanitize_text(text):
+    """
+    Remove unwanted characters from user input for basic sanitization.
+    """
     return re.sub(r"[^\w\s@.-]", "", text.strip())
 
 
 def is_safe_url(target):
+    """
+    Check if a redirect target is safe (same host, http/https).
+    """
     ref_url = urlparse(request.host_url)
     test_url = urlparse(urljoin(request.host_url, target))
     return test_url.scheme in ("http", "https") and ref_url.netloc == test_url.netloc
@@ -37,11 +51,17 @@ def is_safe_url(target):
 
 @app.route("/")
 def index():
+    """
+    Home page: show all products in carousels.
+    """
     return render_template("index.html", products=get_all_products())
 
 
 @app.route("/product/<int:pid>")
 def product_detail(pid):
+    """
+    Product detail page for a single product.
+    """
     product = get_product(pid)
     if not product:
         return redirect(url_for("index"))
@@ -50,6 +70,9 @@ def product_detail(pid):
 
 @app.route("/add_to_cart/<int:pid>", methods=["GET"])
 def add_to_cart(pid):
+    """
+    Add a product to the cart with a specified quantity (limited by stock).
+    """
     cart = session.get("cart", {})
     product = get_product(pid)
     if not product or product.get("stock", 0) == 0:
@@ -58,6 +81,7 @@ def add_to_cart(pid):
         qty = int(request.args.get("qty", 1))
     except (TypeError, ValueError):
         qty = 1
+    # Clamp quantity to available stock
     qty = max(1, min(qty, product["stock"]))
     cart[str(pid)] = cart.get(str(pid), 0) + qty
     # Ensure cart quantity does not exceed stock
@@ -69,6 +93,9 @@ def add_to_cart(pid):
 
 @app.route("/cart")
 def cart():
+    """
+    Display the user's cart with all items and totals.
+    """
     cart = session.get("cart", {})
     items = []
     total = 0
@@ -83,12 +110,17 @@ def cart():
 
 @app.route("/checkout", methods=["GET", "POST"])
 def checkout():
+    """
+    Checkout page: requires login, validates form, saves order, updates stock.
+    """
     if "user" not in session:
+        # Redirect to login with next param if not logged in
         return redirect(url_for("login", next=request.url))
     user_info = get_user_info(session["user"])
     name = user_info["username"] if user_info else ""
     address = ""
     if request.method == "POST":
+        # Get and sanitize form fields
         name = sanitize_text(request.form.get("name", name))
         address = sanitize_text(request.form.get("address", address))
         payment_method = sanitize_text(request.form.get("payment_method", ""))
@@ -116,7 +148,7 @@ def checkout():
             if not paypal_email:
                 errors.append("PayPal email is required.")
             payment_info = json.dumps({"paypal_email": paypal_email})
-        # Prepare cart items
+        # Prepare cart items and check stock
         cart = session.get("cart", {})
         items = []
         total = 0
@@ -149,7 +181,7 @@ def checkout():
             total,
             user_id=user_id,
         )
-        # Update stock
+        # Update stock for each product
         for pid, qty in cart.items():
             update_stock(int(pid), qty)
         session.pop("cart", None)
@@ -161,6 +193,9 @@ def checkout():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    """
+    User registration page. Registers user, logs them in, and redirects to next or home.
+    """
     errors = []
     next_url = request.args.get("next")
     if request.method == "POST":
@@ -184,6 +219,9 @@ def register():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    """
+    User login page. Authenticates and redirects to next or home.
+    """
     errors = []
     next_url = request.args.get("next")
     if request.method == "POST":
@@ -202,9 +240,13 @@ def login():
 
 @app.route("/logout")
 def logout():
+    """
+    Log out the current user and redirect to home.
+    """
     session.pop("user", None)
     return redirect(url_for("index"))
 
 
 if __name__ == "__main__":
+    # Run the Flask development server
     app.run(debug=True)
