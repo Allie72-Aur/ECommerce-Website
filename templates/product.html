@@ -1,83 +1,60 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ product.name }} - ElectroShop</title>
-    <link
-      href="/static/bootstrap-5.3.7-dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-  </head>
 
-  <body>
-    <!-- Navbar with user session logic -->
-    <nav class="navbar navbar-light bg-light mb-4">
-      <div class="container">
-        <a class="navbar-brand" href="/">ElectroShop</a>
-        <div>
-          {% if session.user %}
-          <!-- Show user info and logout if logged in -->
-          <span class="me-2">Hello, {{ session.user }}!</span>
-          <a class="btn btn-outline-danger" href="/logout">Logout</a>
-          {% else %}
-          <!-- Show login/register if not logged in -->
-          <a class="btn btn-outline-primary" href="/login">Login</a>
-          <a class="btn btn-outline-secondary ms-2" href="/register"
-            >Register</a
-          >
-          {% endif %}
-          <a class="btn btn-outline-primary ms-2" href="/cart">Cart</a>
-        </div>
-      </div>
-    </nav>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ product.name }} - ElectroShop</title>
+  <link href="/static/bootstrap-5.3.7-dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Minimalistic custom styles -->
+  <link href="/static/css/custom.css" rel="stylesheet" />
+</head>
+
+<body>
+  <!-- Navbar with user session logic -->
+  <nav class="navbar navbar-light bg-light mb-4">
     <div class="container">
-      <div class="row">
-        <div class="col-md-5">
-          <!-- Product image -->
-          <img
-            src="{{ product.img }}"
-            class="img-fluid"
-            alt="{{ product.name }}"
-          />
-        </div>
-        <div class="col-md-7">
-          <!-- Product details and add to cart form -->
-          <h2>{{ product.name }}</h2>
-          <p>{{ product.desc }}</p>
-          <h4>${{ product.price }}</h4>
-          <p class="text-muted">Stock: {{ product.stock }}</p>
-          <!-- Add to cart form with quantity limited by stock -->
-          <form method="get" action="/add_to_cart/{{ product.id }}">
-            <div class="mb-3">
-              <label for="qty" class="form-label">Quantity</label>
-              <input
-                type="number"
-                class="form-control"
-                id="qty"
-                name="qty"
-                value="1"
-                min="1"
-                max="{{ product.stock }}"
-                required
-              />
-            </div>
-            <button
-              type="submit"
-              class="btn btn-success"
-              {%
-              if
-              product.stock=""
-              ="0"
-              %}disabled{%
-              endif
-              %}
-            >
-              Add to Cart
-            </button>
-          </form>
-        </div>
+      <a class="navbar-brand" href="/">ElectroShop</a>
+      <div>
+        {% if session.user %}
+        <!-- Show user info and logout if logged in -->
+        <span class="me-2">Hello, {{ session.user }}!</span>
+        <a class="btn btn-outline-danger" href="/logout">Logout</a>
+        {% else %}
+        <!-- Show login/register if not logged in -->
+        <a class="btn btn-outline-primary" href="/login">Login</a>
+        <a class="btn btn-outline-secondary ms-2" href="/register">Register</a>
+        {% endif %}
+        <a class="btn btn-outline-primary ms-2" href="/cart">Cart</a>
       </div>
     </div>
-  </body>
+  </nav>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-5">
+        <!-- Product image -->
+        <img src="{{ product.img }}" class="img-fluid" alt="{{ product.name }}" />
+      </div>
+      <div class="col-md-7">
+        <!-- Product details and add to cart form -->
+        <h2>{{ product.name }}</h2>
+        <p>{{ product.desc }}</p>
+        <h4>${{ product.price }}</h4>
+        <p class="text-muted">Stock: {{ product.stock }}</p>
+        <!-- Add to cart form with quantity limited by stock -->
+        <form method="get" action="/add_to_cart/{{ product.id }}">
+          <div class="mb-3">
+            <label for="qty" class="form-label">Quantity</label>
+            <input type="number" class="form-control" id="qty" name="qty" value="1" min="1" max="{{ product.stock }}"
+              required />
+          </div>
+          <button type="submit" class="btn btn-success" {% if product.stock=="0" %}disabled{% endif %}>
+            Add to Cart
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+
 </html>

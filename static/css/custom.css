@@ -1,0 +1,64 @@
+/* Minimalistic card shadow and hover effect with metallic border */
+.card {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.2s, border 0.2s;
+  border-radius: 0.5rem;
+  border: 2px solid #b0b0b0; /* Subtle metallic border */
+  background: linear-gradient(135deg, #fff 0%, #e0e0e0 100%);
+}
+
+.card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  border: 2px solid #7fd8ff; /* Cyan-silver metallic on hover */
+  background: linear-gradient(135deg, #fff 0%, #b0c4ce 100%);
+}
+
+.card-body {
+  background: linear-gradient(180deg, #fff 0%, #c0c0c0 100%);
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+
+/* Carousel arrow tweaks for subtlety and metallic look */
+.custom-carousel-arrow {
+  opacity: 0.8;
+  transition: opacity 0.2s, background 0.2s, box-shadow 0.2s, border 0.2s;
+  background: linear-gradient(135deg, #b0b0b0 60%, #e0e0e0 100%) !important;
+  box-shadow: 0 2px 8px rgba(180, 180, 180, 0.15);
+  border: 2px solid #b0b0b0;
+}
+
+.custom-carousel-arrow:hover {
+  opacity: 1;
+  background: linear-gradient(135deg, #7fd8ff 60%, #e0e0e0 100%) !important;
+  border: 2px solid #7fd8ff;
+}
+
+/* Navbar brand metallic accent */
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #b0b0b0 !important;
+  text-shadow: 0 1px 2px #fff, 0 0px 8px #b0b0b0;
+}
+
+/* Minimal button rounding and metallic border */
+.btn {
+  border-radius: 0.4rem;
+  border: 2px solid #b0b0b0;
+  background: linear-gradient(135deg, #fff 80%, #e0e0e0 100%);
+  color: #333;
+  transition: border 0.2s, background 0.2s, color 0.2s;
+}
+
+.btn:hover,
+.btn:focus {
+  border: 2px solid #7fd8ff;
+  background: linear-gradient(135deg, #e0f7fa 60%, #b0c4ce 100%);
+  color: #222;
+}
+
+/* Subtle container padding */
+.container {
+  padding-bottom: 2rem;
+}
